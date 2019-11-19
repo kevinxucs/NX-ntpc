@@ -95,6 +95,8 @@ void printWithArgs(const char *msg, ...)
     consoleUpdate(NULL);
 }
 
+// We need system service access, not just user (the default)
+TimeServiceType __nx_time_service_type = TimeServiceType_System;
 int main(int argc, char **argv)
 {
     const char *server_name = "0.pool.ntp.org";
@@ -121,7 +123,7 @@ int main(int argc, char **argv)
 
     print("Socket services initialized");
 
-    rs = nifmInitialize();
+    rs = nifmInitialize(NifmServiceType_User);
     if(R_FAILED(rs))
     {
         printWithArgs("Failed to init nifm services, with error code %x\n", rs);
@@ -224,7 +226,8 @@ int main(int argc, char **argv)
     }
 
     bool internetTimeSync;
-    rs = setsysGetFlag(60, &internetTimeSync);
+
+    rs = setsysIsUserSystemClockAutomaticCorrectionEnabled(&internetTimeSync);
     if(R_FAILED(rs))
     {
         printWithArgs("Unable to detect if internet time sync is enabled, %x\n", rs);
@@ -243,7 +246,7 @@ int main(int argc, char **argv)
             if (kDown & KEY_PLUS) goto cleanup;
             if (kDown & KEY_A) 
             {
-                rs = setsysSetFlag(60, true);
+                rs = setsysSetUserSystemClockAutomaticCorrectionEnabled(true);
                 if(R_SUCCEEDED(rs))
                 {
                     serviceCleanup();
