@@ -99,7 +99,7 @@ void printWithArgs(const char *msg, ...)
 TimeServiceType __nx_time_service_type = TimeServiceType_System;
 int main(int argc, char **argv)
 {
-    const char *server_name = "0.pool.ntp.org";
+    const char *server_name = "172.31.1.1";
     const uint16_t port = 123;
     int sockfd = -1;
 
