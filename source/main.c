@@ -186,7 +186,7 @@ int main(int argc, char **argv)
         goto done;
     }
 
-    printWithArgs("Connected to 0.pool.ntp.org with result: %x %x\nSending time request...\n", res, errno);
+    printWithArgs("Connected to %s with result: %x %x\nSending time request...\n", server_name, res, errno);
     
     errno = 0;
     if((res = send(sockfd, (char *)&packet, sizeof(ntp_packet), 0)) < 0)
